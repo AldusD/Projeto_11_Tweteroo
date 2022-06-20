@@ -26,6 +26,35 @@ app.post("/sign-up", (req, res) => {
     res.send("Invalid Data"); // Status code 422?
 })
 
+app.get("/tweets", (req, res) => {
+    if(tweets.length === 0) res.send([]);
+
+    const tweetList = tweets.map(t => {
+        const user = users.find(u => u.username === t.username);
+        return {
+            username: user.username,
+            avatar: user.avatar,
+            tweet: t.tweet
+        }
+    }) // tweets contains now avatar fields
+
+    const tweetsPerScreen = (tweets.length > 10) ? 10 : tweets.length;
+    const orderedTweetList = []; // put newer tweets first and reduces length if needed
+    for(let i = 1; i <= tweetsPerScreen; i++) {
+        const index = tweets.length - i;
+        orderedTweetList.push(tweetList[index]);
+    }
+    res.send(orderedTweetList);
+})
+
+app.post("/tweets", (req, res) => {
+    tweets.push({
+        username: req.body.username,
+        tweet: req.body.tweet
+    })
+    res.send("OK");
+})
+
 app.get("/test", (req, res) => {
     console.log(users, tweets);
     res.send('Test Done')
