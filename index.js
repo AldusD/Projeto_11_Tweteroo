@@ -55,9 +55,4 @@ app.post("/tweets", (req, res) => {
     res.send("OK");
 })
 
-app.get("/test", (req, res) => {
-    console.log(users, tweets);
-    res.send('Test Done')
-})
-
 app.listen(5000);
